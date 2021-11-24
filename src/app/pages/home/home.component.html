@@ -1,0 +1,324 @@
+<nav class="navbar navbar-expand-lg text-light">
+    <div class="container-fluid">
+      <div class="navbar-brand" href="#">Forza dash</div>
+      
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" routerLink="/home">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" aria-current="page" routerLink="/charts">Charts</a>
+            </li>
+        </ul>
+        <h5><span class="badge bg-danger" *ngIf="isConnecting">Disconnected  </span></h5>
+        <h5><span class="badge bg-success" *ngIf="!isConnecting">Connected  </span></h5> 
+        <div *ngIf="ping" style="margin-left: 1%;">
+            <div *ngIf="ping <= 100">
+                Ping: <span class="badge badge-success">{{ping}} ms</span>
+            </div>
+            <div *ngIf="ping > 100 && ping < 250">
+                Ping: <span class="badge badge-warning">{{ping}} ms</span>
+            </div>
+            <div *ngIf="ping > 250">
+                Ping: <span class="badge badge-danger">{{ping}} ms</span>
+            </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+<main class="px-4 mt-2" style="color: #FFF;">
+    <div class="row">
+        <div class="col-lg-3" style="margin-top: 2%;">
+            <div class="card">
+                <div class="card-body text-center">
+                    <div style="margin: 0rem">
+                        <div class="row">
+                            <div class="col">
+                                <ngx-gauge [cap]="'round'" [foregroundColor]="'red'" [animate]='false' [type]="'arch'" [value]="brake" [label]="'Brake'" [min]="0" [max]="100" [size]="150" [thick]="15" [append]="'%'"></ngx-gauge>
+                            </div>
+                            <div class="col">
+                                <ngx-gauge [cap]="'round'" [animate]='false' [type]="'arch'" [value]="throttle" [label]="'Throttle'" [min]="0" [max]="100" [size]="150" [thick]="15" [append]="'%'"></ngx-gauge>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 2%;">
+                            <div class="col">
+                                <ngx-gauge [cap]="'round'" [foregroundColor]="'red'" [animate]='false' [type]="'arch'" [value]="handbrake" [label]="'Hand Brake'" [min]="0" [max]="100" [size]="150" [thick]="15" [append]="'%'"></ngx-gauge>
+                            </div>
+                            <div class="col">
+                                <ngx-gauge [cap]="'round'" [foregroundColor]="'red'" [animate]='false' [type]="'arch'" [value]="clutch" [label]="'Clutch'" [min]="0" [max]="100" [size]="150" [thick]="15" [append]="'%'"></ngx-gauge>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 2%">
+                            <div class="col">
+                                <h3>Torque</h3>
+                                <h3>{{torque}}</h3>
+                            </div>
+                            <div class="col">
+                                <h3>Power</h3>
+                                <h3>{{power}} %</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6" style="margin-top: 2%;">
+            <div class="card">
+                <div class="card-body text-center">
+                    <div style="margin: 0rem">
+                        <div class="row">
+                            <div class="col">
+                                
+                            </div>
+                            <div class="col">    
+                                <h1><span class="badge bg-success" *ngIf="raceOn" >Racing</span></h1>
+                                <h1><span class="badge bg-danger" *ngIf="!raceOn">Not racing</span></h1>                                
+                            </div>
+                            <div class="col">
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <ngx-gauge [cap]="'round'" [animate]='true' [duration]="100" [type]="'arch'" [value]="gear" [label]="'Gear'" [min]="0" [max]="10" [size]="150" [thick]="15"></ngx-gauge>
+                            </div>
+                            <div class="col" style="margin-top: 10%">
+                                <ngx-gauge [cap]="'round'" [animate]='false' [type]="'arch'" [value]="rpm" [label]="'RPM'" [min]="0" [max]="maxrpm" [size]="300" [thick]="15"></ngx-gauge>
+                            </div>
+                            <div class="col">
+                                <ngx-gauge [cap]="'round'" [animate]='true' [duration]="100" [type]="'arch'" [value]="boost" [label]="'Boost'" [min]="0" [max]="50" [size]="150" [thick]="15" [append]="'psi'"></ngx-gauge>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3" style="margin-top: 2%;">
+            <div class="row">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <!--<ng-toggle class="float-left" [value]="speedVal" (click)="changeSpeedVal()"  [width]="65" [height]="25" [color]="{unchecked: '#ee7752', checked: '#e73c7e'}" [labels]="{unchecked: 'KM/H', checked: 'MP/H'}"></ng-toggle>-->
+                        <div style="margin: 0rem">
+                            <div class="row">
+                                <div class="col" *ngIf="!speedVal">
+                                    <ngx-gauge [cap]="'round'" [animate]='true' [duration]="100" [type]="'arch'" [value]="speedkmh" [label]="'Speed'" [min]="0" [max]="600" [size]="200" [thick]="15" [append]="'km/h'"></ngx-gauge>
+                                </div>
+                                <div class="col" *ngIf="speedVal">
+                                    <ngx-gauge [cap]="'round'" [animate]='true' [duration]="100" [type]="'arch'" [value]="speedmph" [label]="'Speed'" [min]="0" [max]="600" [size]="200" [thick]="15" [append]="'mp/h'"></ngx-gauge>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row" style="margin-top: 2%;">
+                                <div class="col">
+                                    <h3>Distance traveled</h3>
+                                    <h3>{{distancetraveled}}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="row" style="margin-top: 2%;">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div class="row">
+                            <h3>Data consumed</h3>
+                        </div>
+                        <div class="row text-center">
+                            {{dataSize}} - MB
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6" style="margin-top: 2%;">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="text-center">Car specs</h1>
+                    <div class="row">
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <p style="font-weight: bold;">Class:</p>
+                                        </div>
+                                        <div class="col">
+                                             <p style="font-weight: bold;"><span class="badge bg-light text-dark">{{carclass}}</span></p>     
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <p style="font-weight: bold;">Ordinal:</p>
+                                        </div>
+                                        <div class="col">
+                                             <p style="font-weight: bold;"><span class="badge bg-light text-dark">{{carordinal}}</span></p>     
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <p style="font-weight: bold;">Performance index:</p>
+                                        </div>
+                                        <div class="col">
+                                             <p style="font-weight: bold;"><span class="badge bg-light text-dark">{{carindex}}</span></p>     
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <p style="font-weight: bold;">Cylinders:</p>
+                                        </div>
+                                        <div class="col">
+                                             <p style="font-weight: bold;"><span class="badge bg-light text-dark">{{cylinders}}</span></p>     
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <p style="font-weight: bold;">Idle RPM:</p>
+                                        </div>
+                                        <div class="col">
+                                             <p style="font-weight: bold;"><span class="badge bg-light text-dark">{{idlerpm}}</span></p>     
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <p style="font-weight: bold;">Max RPM:</p>
+                                        </div>
+                                        <div class="col">
+                                             <p style="font-weight: bold;"><span class="badge bg-light text-dark">{{maxrpm}}</span></p>     
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--
+                        <div class="col">
+                            <div class="row">
+                                <h3>Car class {{carclass}}</h3>
+                            </div>
+                            <div class="row">
+                                <h3>Car ordinal {{carordinal}}</h3>
+                            </div>
+                            <div class="row">
+                                <h3>Car performance index {{carindex}}</h3>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="row">
+                                <h3>Cylinders {{cylinders}}</h3>
+                            </div>
+                            <div class="row">
+                                <h3>Idle RPM {{idlerpm}}</h3>
+                            </div>
+                            <div class="row">
+                                <h3>Max RPM {{maxrpm}}</h3>
+                            </div>
+                        </div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col" style="margin-top: 2%;" *ngIf="lapnumber > 0">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h1>Race stats</h1>
+                    <div class="row" style="margin-top: 2%;">
+                        <div class="col">
+                            <h3>Current lap</h3>
+                            <h3>{{currentlap}}</h3>
+                        </div>
+                        <div class="col">
+                            <h3>Lap number</h3>
+                            <h3>{{lapnumber}}</h3>
+                        </div>
+                        <div class="col">
+                            <h3>Race position</h3>
+                            <h3>{{raceposition}}</h3>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 2%;">
+                        <div class="col">
+                            <h3>Last Lap</h3>
+                            <h3>{{lastlap}}</h3>
+                        </div>
+                        <div class="col">
+                            <h3>Best lap</h3>
+                            <h3>{{bestlap}}</h3>
+                        </div>
+                        <div class="col">
+                            <h3>Current race time</h3>
+                            <h3>{{currentracetime}}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col" style="margin-top: 2%;">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-5">
+                            <div class="d-flex flex-row-reverse">
+                                <div style="width: 50px; height: 80px; border-radius: 10px;" [ngStyle]="{'transform': getSteer(), 'background-color': getFLT()}"></div><p style="margin-right: 2%;">{{TireTempFrontLeft}} °</p>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="d-flex align-items-center">
+                                <div style="width: 100%; height: 10px; background-color: white; margin-top: 25%;"></div>
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <div class="d-flex flex-row">
+                            <div class="float-left" style="width: 50px; height: 80px; border-radius: 10px;" [ngStyle]="{'transform': getSteer(), 'background-color': getFRT()}"></div><p style="margin-left: 2%;">{{TireTempFrontRight}} °</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5">
+
+                        </div>
+                        <div class="col">
+                            <div class="d-flex flex-row">
+                                <div style="width: 10px; height: 100px; background-color: white; margin-left: 45%;"></div>
+                            </div>
+                        </div>
+                        <div class="col-5">
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5">
+                            <div class="d-flex flex-row-reverse">
+                                <div style="width: 50px; height: 80px; border-radius: 10px;" [ngStyle]="{'background-color': getRLT()}"></div><p style="margin-right: 2%;">{{TireTempRearLeft}} °</p>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="d-flex align-items-center">
+                                <div style="width: 100%; height: 10px; background-color: white; margin-top: 25%;"></div>
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <div class="d-flex flex-row">
+                            <div class="float-left" style="width: 50px; height: 80px; border-radius: 10px;" [ngStyle]="{'background-color': getRRT()}"></div><p style="margin-left: 2%;">{{TireTempRearRight}} °</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div>
+</main>

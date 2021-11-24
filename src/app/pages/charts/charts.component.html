@@ -1,0 +1,118 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <div class="navbar-brand" href="#">Forza dash</div>
+      
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="nav-link" aria-current="page" routerLink="/home">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" routerLink="/charts">Charts</a>
+            </li>
+        </ul>
+        <label style="margin-right: 1%;" class="text-light">Refresh rate</label>
+        <select class="form-select" [(ngModel)]="refreshrate" aria-label="Default select example" style="margin-right: 2%; width: 10%;">
+            <option value="1">1</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100" selected>100</option>
+            <option value="250">250</option>
+            <option value="500">500</option>
+            <option value="1000">1000</option>
+            <option value="2000">2000</option>
+          </select>
+        <button type="button" class="btn btn-outline-danger" *ngIf="dataReload" style="margin-right: 2%;" (click)="handleReload()">Disable data reload</button>
+        <button type="button" class="btn btn-outline-success" *ngIf="!dataReload" style="margin-right: 2%;" (click)="handleReload()">Enable data reload</button>
+
+        <h1><span class="badge bg-success" *ngIf="raceOn" type="submit" >Racing</span></h1>
+        <h1><span class="badge bg-danger" *ngIf="!raceOn" type="submit" >Not racing</span></h1>
+      </div>
+    </div>
+  </nav>
+
+<main class="px-4 mt-2">
+    <div class="row" style="height: 50%;">
+        <div class="col-lg-6" style="margin-top: 2%;">
+            <div class="card">
+                <div class="card-body">
+                    <canvas id="canvas2"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6" style="margin-top: 2%;">
+            <div class="card">
+                <div class="card-body">
+                    <canvas id="canvas"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="height: 50%;">
+        <div class="col-lg-6" style="margin-top: 2%;">
+            <div class="card">
+                <div class="card-body">
+                    <canvas id="canvas3"></canvas>
+                </div>
+            </div> 
+        </div>
+        <div class="col-lg-6" style="margin-top: 2%;">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="text-center">{{steer}}</h1>
+                    <div class="row">
+                        <div class="col-5">
+                            <div class="d-flex flex-row-reverse">
+                                <div style="width: 50px; height: 80px; border-radius: 10px;" [ngStyle]="{'transform': getSteer(), 'background-color': getFLT()}"></div><p style="margin-right: 2%;">{{TireTempFrontLeft}} °</p>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="d-flex align-items-center">
+                                <div style="width: 100%; height: 10px; background-color: black; margin-top: 25%;"></div>
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <div class="d-flex flex-row">
+                            <div class="float-left" style="width: 50px; height: 80px; border-radius: 10px;" [ngStyle]="{'transform': getSteer(), 'background-color': getFRT()}"></div><p style="margin-left: 2%;">{{TireTempFrontRight}} °</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5">
+
+                        </div>
+                        <div class="col">
+                            <div class="d-flex flex-row">
+                                <div style="width: 10px; height: 100px; background-color: black; margin-left: 45%;"></div>
+                            </div>
+                        </div>
+                        <div class="col-5">
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5">
+                            <div class="d-flex flex-row-reverse">
+                                <div style="width: 50px; height: 80px; border-radius: 10px;" [ngStyle]="{'background-color': getRLT()}"></div><p style="margin-right: 2%;">{{TireTempRearLeft}} °</p>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="d-flex align-items-center">
+                                <div style="width: 100%; height: 10px; background-color: black; margin-top: 25%;"></div>
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <div class="d-flex flex-row">
+                            <div class="float-left" style="width: 50px; height: 80px; border-radius: 10px;" [ngStyle]="{'background-color': getRRT()}"></div><p style="margin-left: 2%;">{{TireTempRearRight}} °</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div>
+</main>
